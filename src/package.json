@@ -23,6 +23,7 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.0",
     "pg": "^8.11.0",
-    "react-script": "^2.0.5"
+    "react-script": "^2.0.5",
+    "react-scripts": "^5.0.1"
   }
 }
