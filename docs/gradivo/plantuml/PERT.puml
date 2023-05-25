@@ -1,0 +1,75 @@
+@startuml
+skinparam backgroundColor transparent
+left to right direction
+
+scale 0.8
+
+<style>
+stateDiagram {
+  arrow {
+    LineColor black
+  }
+}
+</style>
+
+skinparam State {
+  BackgroundColor #e8f5fd
+  BorderColor #5FB8EC
+}
+
+skinparam defaultTextAlignment center  
+
+state "S1M" as S1M : <#e8f5fd,#e8f5fd>| 7 | 3 | 10 |\n|    1 | 4 | 11 |
+state "S1SP" : <#e8f5fd,#e8f5fd>| 3 | 0 | 3 |\n|    8 | 8 | 11 |
+state "S1UV" : <#e8f5fd,#e8f5fd>| 3 | 0 | 3 |\n|    1 | 1 | 4 |
+state "S1FZ" : <#e8f5fd,#e8f5fd>| 3 | 0 | 3 |\n|    5 | 5 | 8 |
+state "S1NFZ" : <#e8f5fd,#e8f5fd>| 3 | 3 | 6 |\n|    5 | 8 | 11 |
+state "<color:darkred>S1D</color>" as S1D #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 5 | 0 | 5 |\n|    0 | 0 | 5 |
+state "<color:darkred>S1PB</color>" as S1PB #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 6 | 5 | 11 |\n|    0 | 5 | 11 |
+state "S1U" : <#e8f5fd,#e8f5fd>| 47 | 0 | 47 |\n|    0 | 0 | 47 |
+
+state "<color:darkred>S2A</color>" as S2A #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 3 | 11 | 14 |\n|    0 | 11 | 14 |
+state "S2RD" : <#e8f5fd,#e8f5fd>| 10 | 14 | 24 |\n|    10 | 24 | 34 |
+state "<color:darkred>S2DZ</color>" as S2DZ #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 15 | 14 | 29 |\n|    0 | 14 | 29 |
+state "S2DA" : <#e8f5fd,#e8f5fd>| 10 | 14 | 24 |\n|    5 | 19 | 29 |
+state "<color:darkred>S2KA</color>" as S2KA #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 5 | 29 | 34 |\n|    0 | 29 | 34 |
+
+state "<color:darkred>S3IZM</color>" as S3IZM #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 2 | 34 | 36 |\n|    0 | 34 | 36 |
+state "<color:darkred>S3TZM</color>" as S3TZM #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 1 | 36 | 37 |\n|    0 | 36 | 37 |
+state "S3IPB" : <#e8f5fd,#e8f5fd>| 3 | 34 | 37 |\n|    1 | 35 | 38 |
+state "S3ICRUD" : <#e8f5fd,#e8f5fd>| 2 | 37 | 39 |\n|    1 | 38 | 40 |
+state "S3TCRUD" : <#e8f5fd,#e8f5fd>| 1 | 39 | 40 |\n|    1 | 40 | 41 |
+state "<color:darkred>S3RMS</color>" as S3RMS #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 2 | 37 | 39 |\n|    0 | 37 | 39 |
+state "<color:darkred>S3IMS</color>" as S3IMS #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 2 | 39 | 41 |\n|    0 | 39 | 41 |
+state "<color:darkred>S3TA</color>" as S3TA #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 3 | 41 | 44 |\n|    0 | 41 | 44 |
+state "<color:darkred>S3D</color>" as S3D #ffe6e6;line:darkred : <#ffe6e6,#ffe6e6>| 3 | 44 | 47 |\n|    0 | 44 | 47 |
+state "S3PP" : <#e8f5fd,#e8f5fd>| 2 | 44 | 46 |\n|    1 | 45 | 47 |
+
+S1UV --> S1M
+S1FZ --> S1NFZ
+S1D --> S1PB
+
+S1SP --> S2A
+S1M --> S2A
+S1NFZ --> S2A
+S1PB --> S2A
+S2A --> S2RD
+S2A --> S2DZ
+S2A --> S2DA
+S2DA --> S2KA
+S2DZ --> S2KA
+
+S2KA --> S3IZM
+S2RD --> S3IZM
+S3IZM --> S3TZM
+S2KA --> S3IPB
+S2RD --> S3IPB
+S3IPB --> S3ICRUD
+S3ICRUD --> S3TCRUD
+S3TZM --> S3RMS
+S3RMS --> S3IMS
+S3IMS --> S3TA
+S3TCRUD --> S3TA
+S3TA --> S3D
+S3TA --> S3PP
+@enduml

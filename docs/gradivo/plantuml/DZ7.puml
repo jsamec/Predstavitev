@@ -1,0 +1,46 @@
+@startuml
+hide footbox
+
+skinparam backgroundcolor transparent
+skinparam defaultTextAlignment center
+skinparam actorBorderColor black
+skinparam actorBackgroundColor white
+skinparam arrowColor black  
+skinparam sequenceLifeLineBorderColor #5FB8EC
+skinparam sequenceParticipantBorderColor #Black
+skinparam sequenceParticipantBackgroundColor white
+
+actor PrijavljeniUpor as "<<actor>>\nPrijavljeni uporabnik\nTrener\nInfluencer"
+participant AnalizaTrenignovView as "<<boundary>>\nAnalizaKorakovView" #LightGreen
+participant AktivnostiController as "<<control>>\nAktivnostiController" #FFAAAA
+participant Aktivnost as "<<entity>>\nAktivnost" #LightBlue
+
+PrijavljeniUpor --> AnalizaTrenignovView: vrniAnalizoDnevnihKorakov()
+activate AnalizaTrenignovView
+PrijavljeniUpor --> AnalizaTrenignovView: dodajStKorakov()
+AnalizaTrenignovView --> AktivnostiController: vrniAnalizoDnevnihKorakov()
+activate AktivnostiController
+AnalizaTrenignovView --> AktivnostiController: dodajStKorakov()
+AktivnostiController --> Aktivnost: vrniAnalizoDnevnihKorakov()
+activate Aktivnost
+AktivnostiController --> Aktivnost: dodajStKorakov()
+Aktivnost --> AktivnostiController: //Informacije o korakih
+AktivnostiController --> AnalizaTrenignovView: //Informacije o korakih
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži poročilo o korakih
+
+alt Analiza Korakov
+PrijavljeniUpor --> AnalizaTrenignovView: vrniAnalizoDnevnihKorakov()
+PrijavljeniUpor --> AnalizaTrenignovView: dodajStKorakov()
+AnalizaTrenignovView --> AktivnostiController: vrniAnalizoDnevnihKorakov()
+AnalizaTrenignovView --> AktivnostiController: dodajStKorakov()
+AktivnostiController --> Aktivnost: vrniAnalizoDnevnihKorakov()
+AktivnostiController --> Aktivnost: dodajStKorakov()
+Aktivnost --> AktivnostiController: //Najdenih ni še nobenih korakov
+deactivate Aktivnost
+AktivnostiController --> AnalizaTrenignovView: //Najdenega ni še nobenih korakov
+deactivate AktivnostiController
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži prazen graf analize korakov
+deactivate AnalizaTrenignovView
+
+end
+@enduml

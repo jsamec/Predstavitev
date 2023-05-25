@@ -1,0 +1,30 @@
+@startuml
+hide footbox
+
+skinparam backgroundcolor transparent
+skinparam defaultTextAlignment center
+skinparam actorBorderColor black
+skinparam actorBackgroundColor white
+skinparam arrowColor black  
+skinparam sequenceLifeLineBorderColor #5FB8EC
+skinparam sequenceParticipantBorderColor #Black
+skinparam sequenceParticipantBackgroundColor white
+
+actor PrijavljeniUpor as "<<actor>>\nPrijavljeni uporabnik\nTrener\nInfluencer"
+participant AnalizaTrenignovView as "<<boundary>>\nPlaniPrehraneInVadbView" #LightGreen
+participant AktivnostiController as "<<control>>\nAPlaniPrehraneInVadbController" #FFAAAA
+participant Aktivnost as "<<entity>>\nPlaniPrehraneInVadb" #LightBlue
+
+PrijavljeniUpor --> AnalizaTrenignovView: iskanjePlanaPrehrane()
+activate AnalizaTrenignovView
+AnalizaTrenignovView --> AktivnostiController: iskanjePlanaPrehrane()
+activate AktivnostiController
+AktivnostiController --> Aktivnost: iskanjePlanaPrehrane()
+activate Aktivnost
+Aktivnost --> AktivnostiController: //Informacije o planu vadbe
+deactivate Aktivnost
+AktivnostiController --> AnalizaTrenignovView: //Informacije o planu vadbe
+deactivate AktivnostiController
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži informacije o planu vadbe
+deactivate AnalizaTrenignovView
+@enduml

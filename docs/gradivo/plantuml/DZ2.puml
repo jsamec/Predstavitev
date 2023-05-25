@@ -1,0 +1,51 @@
+@startuml
+hide footbox
+
+skinparam backgroundcolor transparent
+skinparam defaultTextAlignment center
+skinparam actorBorderColor black
+skinparam actorBackgroundColor white
+skinparam arrowColor black  
+skinparam sequenceLifeLineBorderColor #5FB8EC
+skinparam sequenceParticipantBorderColor #Black
+skinparam sequenceParticipantBackgroundColor white
+
+actor NeprijavljeniUpor as "<<actor>>\nNeprijavljenUporabnik"
+participant PrijavaView as "<<boundary>>\nPrijavaView" #LightGreen
+participant PrijavaRegistracijaOdjavaController as "<<control>>\nPrijavaRegistracijaOdjavaController" #FFAAAA
+participant Uporabnik as "<<entity>>\nUporabnik" #LightBLue
+
+NeprijavljeniUpor --> PrijavaView: //Oddaj obrazec za prijavo
+activate PrijavaView
+PrijavaView --> PrijavaRegistracijaOdjavaController: preveriMail()
+activate PrijavaRegistracijaOdjavaController
+PrijavaView --> PrijavaRegistracijaOdjavaController: preveriGeslo()
+PrijavaView --> PrijavaRegistracijaOdjavaController: prijaviUporabnika()
+PrijavaRegistracijaOdjavaController --> Uporabnik: prijaviUporabnika()
+activate Uporabnik
+Uporabnik --> PrijavaRegistracijaOdjavaController: //Uspešna prijava
+PrijavaRegistracijaOdjavaController --> PrijavaView: //Uspešna prijava
+PrijavaView --> NeprijavljeniUpor: //Prikaži sporočilo o uspešni prijavi
+
+alt Prijava z preusmeritvijo
+NeprijavljeniUpor --> PrijavaView: //Oddaj obrazec za prijavo
+PrijavaView --> PrijavaRegistracijaOdjavaController: preveriMail()
+PrijavaView --> PrijavaRegistracijaOdjavaController: preveriGeslo()
+PrijavaView --> PrijavaRegistracijaOdjavaController: prijaviUporabnika()
+PrijavaRegistracijaOdjavaController --> Uporabnik: prijaviUporabnika()
+Uporabnik --> PrijavaRegistracijaOdjavaController: //Uspešna prijava
+deactivate Uporabnik
+PrijavaRegistracijaOdjavaController --> PrijavaView: //Uspešna prijava
+PrijavaView --> NeprijavljeniUpor: //Prikaži sporočilo o uspešni prijavi
+
+else Neustrezen vnos
+PrijavaRegistracijaOdjavaController --> PrijavaView: //Zahtevaj prikaz opozorila o neobstoječem računu
+PrijavaView --> NeprijavljeniUpor: //Opozori neprijavljenega uporabnika o neobstoječem računu
+
+PrijavaRegistracijaOdjavaController --> PrijavaView: //Zahtevaj prikaz opozorila o neujemajočih podatkih
+deactivate PrijavaRegistracijaOdjavaController
+PrijavaView --> NeprijavljeniUpor: //Opozori neprijavljenega uporabnika o neujemajočih podatkih
+deactivate PrijavaView
+
+end
+@enduml

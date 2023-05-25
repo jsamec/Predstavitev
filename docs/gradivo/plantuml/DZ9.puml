@@ -1,0 +1,68 @@
+@startuml
+hide footbox
+
+skinparam backgroundcolor transparent
+skinparam defaultTextAlignment center
+skinparam actorBorderColor black
+skinparam actorBackgroundColor white
+skinparam arrowColor black  
+skinparam sequenceLifeLineBorderColor #5FB8EC
+skinparam sequenceParticipantBorderColor #Black
+skinparam sequenceParticipantBackgroundColor white
+
+actor PrijavljeniUpor as "<<actor>>\nPrijavljeni uporabnik\nTrener\nInfluencer"
+participant AnalizaTrenignovView as "<<boundary>>\nPrijateljstvaView" #LightGreen
+participant AktivnostiController as "<<control>>\nProfilController" #FFAAAA
+participant Aktivnost as "<<entity>>\nUporabniki" #LightBlue
+
+PrijavljeniUpor --> AnalizaTrenignovView: vrniPrijatelja()
+activate AnalizaTrenignovView
+AnalizaTrenignovView --> AktivnostiController: vrniPrijatelja()
+activate AktivnostiController
+AktivnostiController --> Aktivnost: vrniPrijatelja()
+activate Aktivnost
+Aktivnost --> AktivnostiController: //Informacije o prijateljih
+AktivnostiController --> AnalizaTrenignovView: //Informacije o prijateljih
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži seznam prijateljev
+
+alt Dodanih še ni prijateljev
+
+Aktivnost --> AktivnostiController: //Najdenega ni nobenega uporabnika
+AktivnostiController --> AnalizaTrenignovView: //Najdenega ni nobenega uporabnika
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži sporočilo o tem da uporabnik še nima prijateljev
+
+end
+
+PrijavljeniUpor --> AnalizaTrenignovView: dodajPrijatelja()
+AnalizaTrenignovView --> AktivnostiController: dodajPrijatelja()
+AktivnostiController --> Aktivnost: dodajPrijatelja()
+Aktivnost --> AktivnostiController: //Informacije o poslani prošnji za prijateljstvo
+AktivnostiController --> AnalizaTrenignovView: //Informacije o poslani prošnji za prijateljstvo
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži potrdilo o poslani prošnji za prijateljstvo
+
+alt Napačni podatki o prijatelju
+
+Aktivnost --> AktivnostiController: //Najdenega ni nobenega uporabnika
+AktivnostiController --> AnalizaTrenignovView: //Najdenega ni nobenega uporabnika
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži sporočilo o tem da uporabnik s tem ID-jem ne obstaja
+
+end
+
+PrijavljeniUpor --> AnalizaTrenignovView: sprejmiPrijatelja()
+AnalizaTrenignovView --> AktivnostiController: sprejmiPrijatelja()
+AktivnostiController --> Aktivnost: sprejmiPrijatelja()
+Aktivnost --> AktivnostiController: //Informacije o sprejeti prošnji za prijateljstvo
+AktivnostiController --> AnalizaTrenignovView: //Informacije o sprejeti prošnji za prijateljstvo
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži potrdilo o sprejeti prošnji za prijateljstvo
+
+
+PrijavljeniUpor --> AnalizaTrenignovView: izbrišiPrijatelja()
+AnalizaTrenignovView --> AktivnostiController: izbrišiPrijatelja()
+AktivnostiController --> Aktivnost: izbrišiPrijatelja()
+Aktivnost --> AktivnostiController: //Informacije o izbrisanem prijateljstvu
+deactivate Aktivnost
+AktivnostiController --> AnalizaTrenignovView: //Informacije o izbrisanem prijateljstvu
+deactivate AktivnostiController
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži potrdilo o izbrisanem prijateljstvu
+deactivate AnalizaTrenignovView
+@enduml

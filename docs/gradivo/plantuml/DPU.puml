@@ -1,0 +1,91 @@
+@startuml
+skinparam backgroundcolor transparent
+skinparam defaultTextAlignment center
+skinparam usecase {
+  backgroundColor white
+  borderColor #5FB8EC
+  arrowColor black
+}
+skinparam actorBorderColor black
+skinparam actorBackgroundColor white
+
+left to right direction
+
+:Neprijavljen uporabnik: as NPU
+:Prijavljen uporabnik: as PU
+:Influencer: as INF
+:Trener: as TRE
+:Administrator: as ADM
+
+:WeatherAPI.com: as WAPI
+:SendGrid: as SGAPI
+
+
+rectangle JymBud {
+usecase (Prijava) #aliceblue;line:blue;line.dotted;text:blue
+usecase (Registracija) #aliceblue;line:blue;line.dotted;text:blue
+usecase (Analiza obrokov) #aliceblue;line:blue;line.dotted;text:blue
+usecase (Iskanje seznama vadb)
+
+usecase (Odjava) #aliceblue;line:blue;line.dotted;text:blue
+usecase (Urejanje lastnega profila)
+usecase (Analiza prehrane) #aliceblue;line:blue;line.dotted;text:blue
+usecase (Analiza treningov) #aliceblue;line:blue;line.dotted;text:blue
+usecase (Iskanje planov prehrane) 
+usecase (Objava treningov)
+usecase (Organiziranje/iskanje športnih dogodkov) #aliceblue;line:blue;line.dotted;text:blue
+usecase (Dodajanje/iskanje prijateljev) #aliceblue;line:blue;line.dotted;text:blue
+usecase (Izvajanje meditacije) #aliceblue;line:blue;line.dotted;text:blue
+usecase (Analiza spanca) #aliceblue;line:blue;line.dotted;text:blue
+usecase (Analiza dnevnih korakov) #aliceblue;line:blue;line.dotted;text:blue
+usecase (Vpogled na lestvico) #aliceblue;line:blue;line.dotted;text:blue
+
+usecase (Analiza forme)
+usecase (Ustvarjanje planov treniranja in prehrane)
+
+usecase (Meet and greet) #aliceblue;line:blue;line.dotted;text:blue
+
+usecase (Moderiranje vsebine in profilov)
+}
+PU --> (Odjava)
+PU --> (Urejanje lastnega profila)
+PU --> (Analiza prehrane)
+PU --> (Analiza treningov)
+PU --> (Iskanje planov prehrane)
+PU --> (Objava treningov)
+PU --> (Organiziranje/iskanje športnih dogodkov)
+PU --> (Dodajanje/iskanje prijateljev)
+PU --> (Izvajanje meditacije)
+PU --> (Analiza spanca)
+PU --> (Analiza dnevnih korakov)
+PU --> (Vpogled na lestvico)
+PU --> (Analiza forme)
+
+NPU --> (Prijava)
+NPU --> (Registracija)
+NPU --> (Analiza obrokov)
+NPU --> (Iskanje seznama vadb)
+
+INF --> (Meet and greet)
+
+TRE --> (Analiza forme)
+TRE --> (Ustvarjanje planov treniranja in prehrane)
+
+ADM --> (Moderiranje vsebine in profilov)
+ADM --> (Prijava)
+ADM --> (Odjava)
+
+(Organiziranje/iskanje športnih dogodkov) .> (Meet and greet) : extends
+
+INF -left-|> PU
+TRE -left-|> PU
+
+PU -left-|> NPU
+
+(Meet and greet) --> WAPI
+(Dodajanje/iskanje prijateljev) --> SGAPI
+(Organiziranje/iskanje športnih dogodkov) --> SGAPI
+
+(Dodajanje/iskanje prijateljev) <-- SGAPI
+(Organiziranje/iskanje športnih dogodkov) <-- SGAPI
+@enduml

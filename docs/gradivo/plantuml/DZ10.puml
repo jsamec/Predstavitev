@@ -1,0 +1,38 @@
+@startuml
+hide footbox
+
+skinparam backgroundcolor transparent
+skinparam defaultTextAlignment center
+skinparam actorBorderColor black
+skinparam actorBackgroundColor white
+skinparam arrowColor black  
+skinparam sequenceLifeLineBorderColor #5FB8EC
+skinparam sequenceParticipantBorderColor #Black
+skinparam sequenceParticipantBackgroundColor white
+
+actor PrijavljeniUpor as "<<actor>>\nPrijavljeni uporabnik\nTrener\nInfluencer"
+participant AnalizaTrenignovView as "<<boundary>>\nVpogledNaLestvicoView" #LightGreen
+participant AktivnostiController as "<<control>>\nAktivnostiController" #FFAAAA
+participant Aktivnost as "<<entity>>\nAktivnosti" #LightBlue
+
+PrijavljeniUpor --> AnalizaTrenignovView: vrniLestvico()
+activate AnalizaTrenignovView
+AnalizaTrenignovView --> AktivnostiController: vrniLestvico()
+activate AktivnostiController
+AktivnostiController --> Aktivnost: vrniLestvico()
+activate Aktivnost
+Aktivnost --> AktivnostiController: //Informacije o lestvici
+AktivnostiController --> AnalizaTrenignovView: //Informacije o lestvici
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži lestvico
+
+alt Uporabnika še ni na lestvici
+
+Aktivnost --> AktivnostiController: //Najdene ni aktivnosti na lestvici
+deactivate Aktivnost
+AktivnostiController --> AnalizaTrenignovView: //Najdene ni aktivnosti na lestvici
+deactivate AktivnostiController
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži sporočilo o tem, da uporabnik še ni opravil aktivnosti in ga zato ni na lestvici
+deactivate AnalizaTrenignovView
+
+end
+@enduml

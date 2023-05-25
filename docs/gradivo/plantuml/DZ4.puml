@@ -1,0 +1,55 @@
+@startuml
+hide footbox
+
+skinparam backgroundcolor transparent
+skinparam defaultTextAlignment center
+skinparam actorBorderColor black
+skinparam actorBackgroundColor white
+skinparam arrowColor black  
+skinparam sequenceLifeLineBorderColor #5FB8EC
+skinparam sequenceParticipantBorderColor #Black
+skinparam sequenceParticipantBackgroundColor white
+
+actor PrijavljeniUpor as "<<actor>>\nPrijavljeni uporabnik"
+actor NeprijavljeniUpor as "<<actor>>\nNeprijavljeni uporabnik"
+participant AnalizaObrokovView as "<<boundary>>\nAnalizaObrokovView" #LightGreen
+participant AktivnostiController as "<<control>>\nAktivnostiController" #FFAAAA
+participant Aktivnost as "<<entity>>\nAktivnost" #LightBlue
+
+PrijavljeniUpor --> AnalizaObrokovView: prikažiAnalizoObrokov()
+activate AnalizaObrokovView
+AnalizaObrokovView --> AktivnostiController: prikažiAnalizoObrokov()
+activate AktivnostiController
+AktivnostiController --> AnalizaObrokovView: //Informacije o obroku
+AnalizaObrokovView --> PrijavljeniUpor: //Prikaži poročilo o obroku
+
+PrijavljeniUpor --> AnalizaObrokovView: shraniObrok()
+PrijavljeniUpor --> AnalizaObrokovView: shraniHrano()
+AnalizaObrokovView --> AktivnostiController: shraniObrok()
+AnalizaObrokovView --> AktivnostiController: shraniHrano()
+AktivnostiController --> Aktivnost: shraniObrok()
+activate Aktivnost
+AktivnostiController --> Aktivnost: shraniHrano()
+Aktivnost --> AktivnostiController: //Shranjene informacije o obroku
+deactivate Aktivnost
+AktivnostiController --> AnalizaObrokovView: //Shranjene informacije o obroku
+AnalizaObrokovView --> PrijavljeniUpor: //Prikaži shranjene informacije o obroku
+
+
+alt Analiza Obrokov
+NeprijavljeniUpor --> AnalizaObrokovView: prikažiAnalizoObrokov()
+AnalizaObrokovView --> AktivnostiController: prikažiAnalizoObrokov()
+AktivnostiController --> AnalizaObrokovView: //Informacije o obroku
+AnalizaObrokovView --> NeprijavljeniUpor: //Prikaži poročilo o obroku
+
+else Neustrezen vnos
+AktivnostiController --> AnalizaObrokovView: //Zahtevaj prikaz opozorila o manjkajočih podatkih
+AnalizaObrokovView --> PrijavljeniUpor: //Opozori neprijavljenega uporabnika o manjkajočih podatkih
+
+AktivnostiController --> AnalizaObrokovView: //Zahtevaj prikaz opozorila o manjkajočih vnosih za to časovno obdobje
+deactivate AktivnostiController
+AnalizaObrokovView --> PrijavljeniUpor: //Opozori neprijavljenega uporabnika o manjkajočih vnosih za to časovno obdobje
+deactivate AnalizaObrokovView
+
+end
+@enduml

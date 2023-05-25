@@ -1,0 +1,28 @@
+@startuml
+hide footbox
+
+skinparam backgroundcolor transparent
+skinparam defaultTextAlignment center
+skinparam actorBorderColor black
+skinparam actorBackgroundColor white
+skinparam arrowColor black  
+skinparam sequenceLifeLineBorderColor #5FB8EC
+skinparam sequenceParticipantBorderColor #Black
+skinparam sequenceParticipantBackgroundColor white
+
+actor PrijavljeniUpor as "<<actor>>\nPrijavljeni uporabnik\nTrener\nInfluencer"
+participant AnalizaTrenignovView as "<<boundary>>\nIzvajanjeMeditacijeView" #LightGreen
+participant AktivnostiController as "<<control>>\nAktivnostiController" #FFAAAA
+participant Aktivnost as "<<entity>>\nAktivnosti" #LightBlue
+
+PrijavljeniUpor --> AnalizaTrenignovView: dodajMeditacijo()
+activate AnalizaTrenignovView
+AnalizaTrenignovView --> AktivnostiController: dodajMeditacijo()
+activate AktivnostiController
+AktivnostiController --> Aktivnost: dodajMeditacijo()
+activate Aktivnost
+Aktivnost --> AktivnostiController: //Informacije o meditaciji
+deactivate Aktivnost
+AktivnostiController --> AnalizaTrenignovView: //Informacije o meditaciji
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži informacije o meditaciji
+@enduml

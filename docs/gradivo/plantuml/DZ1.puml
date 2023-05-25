@@ -1,0 +1,50 @@
+@startuml
+hide footbox
+
+skinparam backgroundcolor transparent
+skinparam defaultTextAlignment center
+skinparam actorBorderColor black
+skinparam actorBackgroundColor white
+skinparam arrowColor black  
+skinparam sequenceLifeLineBorderColor #5FB8EC
+skinparam sequenceParticipantBorderColor #Black
+skinparam sequenceParticipantBackgroundColor white
+
+actor NeprijavljeniUpor as "<<actor>>\nNeprijavljeni uporabnik"
+participant RegistracijaView as "<<boundary>>\nRegistracijaView" #LightGreen
+participant PrijavaRegistracijaController as "<<control>>\nPrijavaRegistracijaOdjavaController" #FFAAAA
+participant Uporabnik as "<<entity>>\nUporabnik" #LightBLue
+
+NeprijavljeniUpor --> RegistracijaView: //Oddaj obrazec za registracijo
+activate RegistracijaView
+RegistracijaView --> PrijavaRegistracijaController: registrirajUporabnika()
+activate PrijavaRegistracijaController
+PrijavaRegistracijaController --> Uporabnik: registrirajUporabnika()
+activate Uporabnik
+Uporabnik --> PrijavaRegistracijaController: //Uspešna registracija
+PrijavaRegistracijaController --> RegistracijaView: //Uspešna registracija
+RegistracijaView --> NeprijavljeniUpor: //Prikaži sporočilo o uspešni registraciji
+
+alt Registracija
+NeprijavljeniUpor --> RegistracijaView: //Oddaj obrazec za registracijo
+RegistracijaView --> PrijavaRegistracijaController: registrirajUporabnika()
+PrijavaRegistracijaController --> Uporabnik: registrirajUporabnika()
+Uporabnik --> PrijavaRegistracijaController: //Uspešna registracija
+deactivate Uporabnik
+PrijavaRegistracijaController --> RegistracijaView: //Uspešna registracija
+RegistracijaView --> NeprijavljeniUpor: //Prikaži sporočilo o uspešni registraciji
+
+else Neustrezen vnos
+PrijavaRegistracijaController --> RegistracijaView: //Zahtevaj prikaz opozorila o neustreznem vnosu
+RegistracijaView --> NeprijavljeniUpor: //Opozori neprijavljenega uporabnika o neustreznem vnosu
+
+PrijavaRegistracijaController --> RegistracijaView: //Zahtevaj prikaz opozorila o že uporabljenem elektronskem naslovu
+RegistracijaView --> NeprijavljeniUpor: //Opozori neprijavljenega uporabnika o že uporabljenem elektronskem naslovu
+
+PrijavaRegistracijaController --> RegistracijaView: //Zahtevaj prikaz opozorila o neprimernem geslu
+deactivate PrijavaRegistracijaController
+RegistracijaView --> NeprijavljeniUpor: //Opozori neprijavljenega uporabnika o neprimernem geslu
+deactivate RegistracijaView
+
+end
+@enduml

@@ -1,0 +1,64 @@
+@startuml
+hide footbox
+
+skinparam backgroundcolor transparent
+skinparam defaultTextAlignment center
+skinparam actorBorderColor black
+skinparam actorBackgroundColor white
+skinparam arrowColor black  
+skinparam sequenceLifeLineBorderColor #5FB8EC
+skinparam sequenceParticipantBorderColor #5FB8EC
+skinparam sequenceParticipantBackgroundColor white
+
+actor PrijavljeniUpor as "<<actor>>\nPrijavljeni uporabnik\nTrener\nInfluencer"
+participant IskanjeDogodkovView as "<<boundary>>\nIskanjeDogodkovView" #LightGreen
+participant OrganiziranjeDogodkovView as "<<boundary>>\nOrganiziranjeDogodkovView" #LightGreen
+participant PrijavaNaDogodekView as "<<boundary>>\nPrijavaNaDogodekView" #LightGreen
+participant DogodkiController as "<<control>>\nDogodkiController" #FFAAAA
+participant Dogodek as "<<entity>>\nDogodek" #LightBlue
+
+PrijavljeniUpor --> IskanjeDogodkovView: vrniSeznamDogodkov()
+activate IskanjeDogodkovView
+IskanjeDogodkovView --> DogodkiController: vrniSeznamDogodkov()
+activate DogodkiController
+DogodkiController --> Dogodek: vrniSeznamDogodkov()
+activate Dogodek
+Dogodek --> DogodkiController: //Seznam vseh dogodkov
+DogodkiController --> IskanjeDogodkovView: //Seznam vseh dogodkov
+IskanjeDogodkovView --> PrijavljeniUpor: //Prikaži vse dogodke
+deactivate IskanjeDogodkovView
+
+PrijavljeniUpor --> PrijavaNaDogodekView: prijavaNaDogodek()
+activate PrijavaNaDogodekView
+PrijavaNaDogodekView --> DogodkiController: prijavaNaDogodek()
+DogodkiController --> Dogodek: prijavaNaDogodek()
+Dogodek --> DogodkiController: //Posodobljene informacije o dogodku
+DogodkiController --> PrijavaNaDogodekView: //Posodobljene informacije o dogodku
+PrijavaNaDogodekView --> PrijavljeniUpor: //Prikazana posodobljena stran o dogodku
+deactivate PrijavaNaDogodekView
+
+alt Organiziranje Dogodkov
+PrijavljeniUpor --> OrganiziranjeDogodkovView: novDogodekObrazec()
+activate OrganiziranjeDogodkovView
+OrganiziranjeDogodkovView --> DogodkiController: novDogodekObrazec()
+DogodkiController --> Dogodek: novDogodekObrazec()
+Dogodek --> DogodkiController: //Prikazi obrazec za nov dogodek
+DogodkiController --> OrganiziranjeDogodkovView: //Prikazi obrazec za nov dogodek
+OrganiziranjeDogodkovView --> PrijavljeniUpor: //Prikazana stran z obrazcem za nov dogodek
+
+PrijavljeniUpor --> OrganiziranjeDogodkovView: ustvariDogodek()
+OrganiziranjeDogodkovView --> DogodkiController: ustvariDogodek()
+DogodkiController --> Dogodek: ustvariDogodek()
+Dogodek --> DogodkiController: //Informacije o novem dogodku
+deactivate Dogodek
+DogodkiController --> OrganiziranjeDogodkovView: //Informacije o novem dogodku
+OrganiziranjeDogodkovView --> PrijavljeniUpor: //Prikazana stran z novim dogodkom
+
+else neustrezen vnos
+DogodkiController --> OrganiziranjeDogodkovView: //Zahtevaj prikaz opozorila o neustreznem vnosu
+deactivate DogodkiController
+OrganiziranjeDogodkovView --> PrijavljeniUpor: //Opozori prijavljenega uporabnika o neustreznem vnosu
+deactivate OrganiziranjeDogodkovView
+
+end
+@enduml

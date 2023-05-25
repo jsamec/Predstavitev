@@ -1,0 +1,25 @@
+@startuml
+hide footbox
+
+skinparam backgroundcolor transparent
+skinparam defaultTextAlignment center
+skinparam actorBorderColor black
+skinparam actorBackgroundColor white
+skinparam arrowColor black  
+skinparam sequenceLifeLineBorderColor #5FB8EC
+skinparam sequenceParticipantBorderColor #5FB8EC
+skinparam sequenceParticipantBackgroundColor white
+
+actor PrijavljeniUpor as "<<actor>>\nPrijavljeni uporabnik\nAdministrator\nInfluencer\nTrener"
+participant OdjavaView as "<<boundary>>\nOdjavaView" #LightGreen
+participant PrijavaRegistracijaOdjavaController as "<<control>>\nPrijavaRegistracijaOdjavaController" #FFAAAA
+
+PrijavljeniUpor --> OdjavaView: odjava()
+activate OdjavaView
+OdjavaView --> PrijavaRegistracijaOdjavaController: odjava()
+activate PrijavaRegistracijaOdjavaController
+PrijavaRegistracijaOdjavaController --> OdjavaView: //Uspešna odjava
+deactivate PrijavaRegistracijaOdjavaController
+OdjavaView --> PrijavljeniUpor: //Uporabnika preusmeri na domačo stran
+deactivate OdjavaView
+@enduml

@@ -1,0 +1,49 @@
+@startuml
+hide footbox
+
+skinparam backgroundcolor transparent
+skinparam defaultTextAlignment center
+skinparam actorBorderColor black
+skinparam actorBackgroundColor white
+skinparam arrowColor black  
+skinparam sequenceLifeLineBorderColor #5FB8EC
+skinparam sequenceParticipantBorderColor #Black
+skinparam sequenceParticipantBackgroundColor white
+
+actor PrijavljeniUpor as "<<actor>>\nPrijavljeni uporabnik\nInfluencer"
+actor Trener as "<<actor>>\nTrener"
+participant AnalizaTrenignovView as "<<boundary>>\nAnalizaFormeView" #LightGreen
+participant AktivnostiController as "<<control>>\nAktivnostiController" #FFAAAA
+participant Aktivnost as "<<entity>>\nAktivnost" #LightBlue
+
+PrijavljeniUpor --> AnalizaTrenignovView: dodajPosnetek()
+activate AnalizaTrenignovView
+AnalizaTrenignovView --> AktivnostiController: dodajPosnetek()
+activate AktivnostiController
+AktivnostiController --> Aktivnost: dodajPosnetek()
+activate Aktivnost
+Aktivnost --> AktivnostiController: //Informacija o uspešnem uploadu
+AktivnostiController --> AnalizaTrenignovView: //Informacija o uspešnem uploadu
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži sporočilo o uspešnem uploadu
+
+alt Analiza Forme
+Trener --> AnalizaTrenignovView: oceniFormo()
+Trener --> AnalizaTrenignovView: dodajKomentar()
+AnalizaTrenignovView --> AktivnostiController: oceniFormo()
+AnalizaTrenignovView --> AktivnostiController: dodajKomentar()
+AktivnostiController --> Aktivnost: oceniFormo()
+AktivnostiController --> Aktivnost: dodajKomentar()
+Aktivnost --> AktivnostiController: //Informacija o uspešni analizi forme
+deactivate Aktivnost
+
+AktivnostiController --> AnalizaTrenignovView: //Informacija o uspešni analizi forme
+AnalizaTrenignovView --> Trener: //Sistem javi informacijo o uspešni analizi forme
+
+else Neustrezen format posnetka
+AktivnostiController --> AnalizaTrenignovView: //Posnetek je v napačnem formatu
+deactivate AktivnostiController
+AnalizaTrenignovView --> PrijavljeniUpor: //Sistem javi, da posnetka ni možno analizirati, saj je v napačnem formatu
+deactivate AnalizaTrenignovView
+
+end
+@enduml

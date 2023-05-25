@@ -1,0 +1,43 @@
+@startuml
+hide footbox
+
+skinparam backgroundcolor transparent
+skinparam defaultTextAlignment center
+skinparam actorBorderColor black
+skinparam actorBackgroundColor white
+skinparam arrowColor black  
+skinparam sequenceLifeLineBorderColor #5FB8EC
+skinparam sequenceParticipantBorderColor #Black
+skinparam sequenceParticipantBackgroundColor white
+
+actor PrijavljeniUpor as "<<actor>>\nPrijavljeni uporabnik\nTrener\nInfluencer"
+participant AnalizaTrenignovView as "<<boundary>>\nUrejanjeLastnegaProfilaView" #LightGreen
+participant AktivnostiController as "<<control>>\nProfilController" #FFAAAA
+participant Aktivnost as "<<entity>>\nUporabniki" #LightBlue
+
+PrijavljeniUpor --> AnalizaTrenignovView: posodobiOsnovneNastavitve()
+activate AnalizaTrenignovView
+AnalizaTrenignovView --> AktivnostiController: posodobiOsnovneNastavitve()
+activate AktivnostiController
+AktivnostiController --> Aktivnost: posodobiOsnovneNastavitve()
+activate Aktivnost
+Aktivnost --> AktivnostiController: //Posodobljeni podatki o uporabniku
+deactivate Aktivnost
+AktivnostiController --> AnalizaTrenignovView: //Posodobljeni podatki o uporabniku
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži posodobljene podatke o uporabniku
+
+alt Napačen vnos
+
+AktivnostiController --> AnalizaTrenignovView: //Podatki za elektronski naslov niso pravilni
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži sporočilo o tem, da podatki za elektronski naslov niso pravilni
+
+AktivnostiController --> AnalizaTrenignovView: //Geslo je prekratko
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži sporočilo o tem, da je geslo prekratko
+
+AktivnostiController --> AnalizaTrenignovView: //Podatki za geslo se ne ujemajo
+deactivate AktivnostiController
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži sporočilo o tem, da se podatki za geslo ne ujemajo
+deactivate AnalizaTrenignovView
+
+end
+@enduml

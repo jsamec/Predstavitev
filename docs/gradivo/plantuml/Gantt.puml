@@ -1,0 +1,102 @@
+@startuml
+title Potek projekta
+
+skinparam backgroundColor transparent
+
+<style>
+ganttDiagram {
+  timeline {
+    LineColor #f2f2f2
+    FontColor gray
+  }
+  task {
+    BackgroundColor #e8f5fd
+    LineColor #5FB8EC
+  }
+  arrow {
+    LineColor #5FB8EC
+  }
+  milestone {
+    BackgroundColor #e8f5fd
+    LineColor #5FB8EC
+  }
+  closed {
+    BackgroundColor #f2f2f2
+    FontColor lightgray
+  }
+}
+</style>
+
+project starts the 13th of March 2023
+saturdays are closed
+sundays are closed
+2023/04/10 is closed
+2023/04/27 is closed
+2023/05/01 is closed
+2023/05/02 is closed
+
+[**Upravljanje projekta** (47dni)] as [S1U] lasts 47 days
+[**Zajem zahtev** (11dni)] as [S1Z] lasts 11 days
+[**Načrt rešitve** (23dni)] as [S2Z] starts at [S1Z]'s end and lasts 23 days
+[**Implementacija** (13dni)] as [S3Z] starts at [S2Z]'s end and lasts 13 days
+
+[S1Z] is colored in springgreen
+[S2Z] is colored in hotpink
+
+
+[S1D] starts at [S1Z]'s start and lasts 5 days
+[S1PB] starts at [S1D]'s end and lasts 6 days
+
+
+[S1SP] starts at [S1Z]'s start and lasts 3 days
+[S1UV] starts at [S1Z]'s start and lasts 3 days
+[S1M] starts at [S1UV]'s end and lasts 7 days
+
+[S1FZ] starts at [S1Z]'s start and lasts 3 days
+[S1NFZ] starts at [S1FZ]'s end and lasts 3 days
+
+[S2A] starts at [S1PB]'s end and lasts 3 days
+[S2A] starts at [S1M]'s end and lasts 3 days
+[S2A] starts at [S1NFZ]'s end and lasts 3 days
+[S2RD] starts at [S2A]'s end and lasts 10 days
+[S2DZ] starts at [S2A]'s end and lasts 15 days
+[S2DA] starts at [S2A]'s end and lasts 10 days
+
+[S2KA] starts at [S2DA]'s end and lasts 5 days
+[S2KA] starts at [S2DZ]'s end and lasts 5 days
+
+[S3IZM] starts at [S2KA]'s end and lasts 2 days
+[S3IZM] starts at [S2RD]'s end and lasts 2 days
+[S3TZM] starts at [S3IZM]'s end and lasts 1 days
+
+[S3IPB] starts at [S2KA]'s end and lasts 3 days
+[S3IPB] starts at [S2RD]'s end and lasts 3 days
+
+[S3ICRUD] starts at [S3IPB]'s end and lasts 2 days
+[S3TCRUD] starts at [S3ICRUD]'s end and lasts 1 days
+
+[S3RMS] starts at [S3TZM]'s end and lasts 2 days
+[S3IMS] starts at [S3RMS]'s end and lasts 2 days
+
+[S3TA] starts at [S3IMS]'s end and lasts 3 days
+[S3TA] starts at [S3TCRUD]'s end and lasts 3 days
+
+[S3D] starts at [S3TA]'s end and lasts 3 days
+[S3PP] starts at [S3TA]'s end and lasts 2 days
+
+[**M1**] happens at [S1Z]'s end
+[**M2**] happens at [S2Z]'s end
+[**M3**] happens at [S3Z]'s end
+
+[S1D] is colored in red
+[S1PB] is colored in red
+[S2A] is colored in red
+[S2DZ] is colored in red
+[S2KA] is colored in red
+[S3IZM] is colored in red
+[S3TZM] is colored in red
+[S3RMS] is colored in red
+[S3IMS] is colored in red
+[S3TA] is colored in red
+[S3D] is colored in red
+@enduml

@@ -1,0 +1,470 @@
+@startuml
+skinparam class {
+  backgroundColor white
+  borderColor #5FB8EC
+  arrowColor black
+}
+
+skinparam class<<boundary>> {
+  backgroundColor #f2fce8
+  borderColor #4d8712
+}
+
+skinparam class<<control>> {
+  backgroundColor #fce8e8
+  borderColor #9e1515
+}
+
+skinparam class<<entity>> {
+  backgroundColor #e8f5fc
+}
+
+skinparam backgroundcolor transparent
+hide circle
+
+Class "PrijateljstvaView" AS PRIJATELJI_VIEW <<boundary>> {
+  -uporabnikId: int
+  -ime: String
+  -priimek: String
+  -sporociloTxt: String
+  -prijateljId: int
+  +dodajPrijatelja(ime: String, uporabnikId: int): void
+  +vrniPrijatelje(uporabnikId: int): Uporabniki []
+  +potrdiPrijatelja(uporabnikId: int): void
+  +izbrišiPrijatelja(uporabnikId: int): void
+  +posljiSporocilo(sporociloTxt: String, prijateljId: int): void
+}
+
+Class "VpogledNaLestvicoView" AS LESTVICA_VIEW <<boundary>> {
+  -ime: String
+  -priimek: String
+  -st_tock: int
+  -mesto: int
+  +vrniLestvico()
+}
+
+Class "PlaniPrehraneInVadbView" AS ISKANJE_PLANOV_VIEW <<boundary>> {
+  -imePlana: String
+  -jeTrening: bool
+  -jeDieta: bool
+  -planOpis: String
+  -vnos: String
+  +ustvariPlan(imePlana: String, jeTrening: bool, jeDieta: bool, planOpis: String): void
+  +iskanjePlanaPrehrane(vnos:String): PlaniPrehraneVadbe[]
+}
+
+Class "IzvajanjeMeditacijeView" AS MEDITACIJA_VIEW <<boundary>> {
+  -casIzvajanja: time
+  -uporabnikId: int
+  +dodajMeditacijo(uporabnikId: int, casIzvajanja: time): void
+}
+
+Class "UrejanjeLastnegaProfilaView" AS UREJANJE_PROFILA_VIEW <<boundary>> {
+  -uporabnikId: int
+  -ime: String
+  -priimek: String
+  -email: String
+  -spol: String
+  -datumRojstva: Date[]
+  -geslo: String
+  -opisUporabnika: String
+  -jeInfulencer: bool
+  -jeTrener: bool
+  +posodobiOsnovneNastavitve(posodobljenUporabnik: Uporabnik): Uporabnik[]
+  +posodobiTipUporabnika(jeInfulencer: bool, jeTrener: bool): Uporabnik[]
+}
+
+Class "DogodkiView" AS DOGODKI_VIEW <<boundary>> {
+  -dogodekId: int
+  -uporabnikId: int
+  -vnos: String
+  +prijavaNaDogodek(dogodekId: int, uporabnikId: int): void
+  +iskanjePlanaVadbe(vnos: String): Dogodek[]
+}
+
+Class "UstvarjanjeDogodkovView" AS USTVARJANJE_DOGODKOV_VIEW <<boundary>> {
+  -naslovDogodka: String
+  -opisDogodka: String
+  -stMest: int
+  -lokacija: String
+  -uporabnikId: int
+  +ustvariDogodek(naslovDogodka: String, opisDogodka: String, stMest: int, lokacija: String, uporabnikId: int): void
+}
+
+Class "AnalizaObrokovView" AS ANALIZA_OBROKOV_VIEW <<boundary>> {
+  -obrok: String
+  -datum: date[]
+  -nazivZivila: String
+  -kolicina: int
+  -energVrednost: int
+  -ohVrednost: int
+  -beljVred: int
+  -mascVred: int
+  +shraniObrok(obrok: String, datum: date[]): void
+  +shraniHrano(nazivZivila: String, kolicina: int, energVrednost: int, ohVrednost: int, beljVred: int, mascVred: int): void
+}
+
+Class "DodajanjeTrenigovView" AS DODAJANJE_TRENINGOV_VIEW <<boundary>> {
+  -uporabnikId: UporabnikId
+  -tipTreninga: String
+  -datumTrening: date
+  -trajanje: time
+  -nazivVadbe: String
+  -tipVade: String
+  -misSkup: String
+  -stPonovitev: int
+  -stSetov: int
+  -tezaOrodja: int
+  +dodajanjeTreninga(tipTreninga: String, opisAktivnosti: String, datum: date, uporabnik: Uporabnik, trajanje: time)
+  +dodajanjeVadbe(trajanje: time, nazivVadbe: String, tipVade: String, misSkup: String, stPonovitev: int, stSetov: int,tezaOrodja: int)
+}
+
+Class "AnalizaTreningovView" AS ANALIZA_TRENINGOV_VIEW <<boundary>> {
+  -datum: Date[]
+  +vrniSeznamDnevnihTreningov(datum: Date[]): Treningi[]
+}
+
+Class "AnalizaSpancaView" AS ANALIZA_SPANCA_VIEW <<boundary>> {
+  -datum: Date[]
+  -spanjeCas: time
+  +vrniAnalizoDnevnegaSpanca(datum: Date[]): Spanec[]
+  +dodajSpanje(spanjeCas: time): void
+}
+
+Class "AnalizaKorakovView" AS ANALIZA_KORAKOV_VIEW <<boundary>> {
+  -datum: Date[]
+  -stKorakov: int
+  +vrniAnalizoDnevnihKorakov(datum: Date[]): Koraki[]
+  +dodajStKorakov(stKorakov: int): void
+}
+
+Class "AnalizaPrehraneView" AS ANALIZA_PREHRANE_VIEW <<boundary>> {
+  -datumOd: Date[]
+  -datumDo: Date[]
+  +vrniAnalizoPrehrane(datumOd: Date[], datumDo: Date[]): Obroki[]
+}
+
+Class "AnalizaFormeView" AS ANALIZA_FORME_VIEW <<boundary>> {
+  -formaId: int
+  -ocenjevalci: Uporabniki[]
+  -ocena: int
+  -posnetek: varBinary
+  +kdoLahkoOceni(ocenjevalci: Uporabniki[])
+  +oceniFormo(ocena: int)
+  +vrniKomentarje(formaId: int): void
+  +dodajKomentar(formaId: int): void
+  +dodajPosnetek(posnetek: varBinary): void
+}
+
+Class "RegistracijaView" AS REGISTRACIJA_VIEW <<boundary>> {
+  -ime: String
+  -priimek: String
+  -email: String
+  -datumRojstvo: date[]
+  -geslo: String
+  -visina: int
+  -teza: int
+  -cilj: String
+  +registrirajUporabnika(uporabnik: Uporabnik)
+}
+
+Class "PrijavaView" AS PRIJAVA_VIEW <<boundary>> {
+  -email: String
+  -geslo: String
+  +preveriMail(email: String): bool
+  +preveriGeslo(email: String): bool
+  +prijaviUporabnika(email: String, geslo: String): void
+  +preveriStatus(uporabnik: Uporabnik): bool
+}
+
+Class "OdjavaView" AS ODJAVA_VIEW <<boundary>> {
+  +odjava(uporabnik: Uporabnik): void
+}
+
+Class "PrijavaRegistracijaOdjavaController" AS LOGIN_CONTROL <<control>> {
+  -ime: String
+  -priimek: String
+  -email: String
+  -datumRojstvo: date[]
+  -geslo: String
+  +preveriMail(email: String): bool
+  +preveriGeslo(email: String): bool
+  +registrirajUporabnika(ime: String, priimek: String, email: String, geslo: String)
+  +prijaviUporabnika(email: String, geslo: String): void
+  +preveriStatus(uporabnik: Uporabnik): bool
+  +odjava(uporabnik: Uporabnik): void
+}
+
+Class "ProfilController" AS PROFIL_CONTROL <<control>> {
+  -uporabnikId: int
+  -ime: String
+  -priimek: String
+  -email: String
+  -spol: String
+  -datumRojstva: Date[]
+  -geslo: String
+  -opisUporabnika: String
+  -jeInfulencer: bool
+  -jeTrener: bool
+  -sporociloTxt: String
+  -prijateljId: int
+  +dodajPrijatelja(ime: String, uporabnikId: int): void
+  +vrniPrijatelje(uporabnikId: int): Uporabniki []
+  +potrdiPrijatelja(uporabnikId: int): void
+  +izbrišiPrijatelja(uporabnikId: int): void
+  +posodobiOsnovneNastavitve(posodobljenUporabnik: Uporabnik): Uporabnik[]
+  +posodobiTipUporabnika(jeInfulencer: bool, jeTrener: bool): Uporabnik[]
+  +posljiSporocilo(sporociloTxt: String, prijateljId: int): void
+}
+
+Class "DogodkiController" AS DOGODKI_CONTROL <<control>> {
+  -uporabnikId: int
+  -dogodekId: int
+  -naslovDogodka: String
+  -opisDogodka: String
+  -stMest: int
+  -lokacija: String
+  -vnos: String
+  +ustvariDogodek(naslovDogodka: String, opisDogodka: String, stMest: int, lokacija: String, uporabnikId: int): void
+  +prijavaNaDogodek(dogodekId: int, uporabnikId: int): void
+  +iskanjePlanaVadbe(vnos: String): Dogodek []
+}
+
+Class "AktivnostiController" AS AKTIVNOSTI_CONTROL <<control>> {
+  -uporabnikId: UporabnikId
+  -datum: date
+  -trajanje: time
+  -tipTreninga: String
+  -datumTrening: date
+  -trajanje: time
+  -nazivVadbe: String
+  -tipVade: String
+  -misSkup: String
+  -stPonovitev: int
+  -stSetov: int
+  -tezaOrodja: int
+  -datum: Date[]
+  -datumOd: Date[]
+  -datumDo: Date[]
+  -formaId: int
+  -ocenjevalci: Uporabniki[]
+  -ocena: int
+  -posnetek: varBinary
+  -obrok: String
+  -nazivZivila: String
+  -kolicina: int
+  -energVrednost: int
+  -ohVrednost: int
+  -beljVred: int
+  -mascVred: int
+  -casIzvajanja: time
+  -uporabnikId: int
+  -stKorakov: int
+  -spanjeCas: time
+  +dodajMeditacijo(uporabnikId: int, casIzvajanja: time): void
+  +dodajanjeTreninga(tipTreninga: String, opisAktivnosti: String, datum: date, uporabnik: Uporabnik, trajanje: time): void
+  +dodajanjeVadbe(trajanje: time, nazivVadbe: String, tipVade: String, misSkup: String, stPonovitev: int, stSetov: int,tezaOrodja: int): void
+  +prikažiAnalizoSpanca(idUporabnik: int)
+  +prikažiAnalizoPrehrane(idUporabnik: int)
+  +prikažiAnalizoAktivnosti(idUporabnik: int)
+  +kdoLahkoOceni(ocenjevalci: Uporabniki[])
+  +oceniFormo(ocena: int): void
+  +vrniKomentarje(formaId: int): void
+  +brisanjeAktivnosti(aktivnostId: int): void
+  +dodajKomentar(formaId: int): void
+  +dodajPosnetek(posnetek: varBinary): void
+  +vrniAnalizoPrehrane(datumOd: Date[], datumDo: Date[]): Obroki[]
+  +vrniSeznamDnevnihTreningov(datum: Date[]): Treningi[]
+  +shraniObrok(obrok: String, datum: date[], nazivZivila: String, kolicina: int, energVrednost: int, ohVrednost: int, beljVred: int, mascVred: int)
+  +vrniAnalizoDnevnihKorakov(datum: Date[]): Koraki[]
+  +dodajStKorakov(stKorakov: int): void
+  +vrniAnalizoDnevnegaSpanca(datum: Date[]): Spanec[]
+  +dodajSpanje(spanjeCas: time): void
+}
+
+Class "PlaniPrehraneInVadbController" AS PLANI_PREHRANE_IN_VADB_CONTROL <<control>> {
+  -imePlana: String
+  -jeTrening: bool
+  -jeDieta: bool
+  -planOpis: String
+  -vnos: String
+  +ustvariPlan(imePlana: String, jeTrening: bool, jeDieta: bool, planOpis: String): void
+  +iskanjePlanaPrehrane(vnos:String): PlaniPrehraneVadbe[]
+}
+
+Class "PlaniPrehraneVadbe" AS PLANI_PREHRANE_VADBE <<entity>> {
+  -imePlana: String
+  -jeTrening: bool
+  -jeDieta: bool
+  -planOpis: String
+  -vnos: String
+  +ustvariPlan(imePlana: String, jeTrening: bool, jeDieta: bool, planOpis: String): void
+  +iskanjePlanaPrehrane(vnos:String): PlaniPrehraneVadbe[]
+}
+
+Class "Aktivnosti" AS AKTIVNOSTI <<entity>> {
+  -aktivnostId: int
+  +brisanjeAktivnosti(aktivnostId: int): void
+}
+
+Class "Uporabniki" AS UPORABNIKI <<entity>> {
+  +uporabnikId: int
+  +ime: String
+  +priimek: String
+  +email: String
+  +spol: String
+  +datumRojstva: Date[]
+  +geslo: String
+  +opisUporabnika: String
+  +jeInfulencer: bool
+  +jeTrener: bool
+  -dodajPrijatelja(ime: String, uporabnikId: int): void
+  -vrniPrijatelje(uporabnikId: int): Uporabniki []
+  -potrdiPrijatelja(uporabnikId: int): void
+  -izbrišiPrijatelja(uporabnikId: int): void
+  -posodobiOsnovneNastavitve(uporabnikId: int, ime: String, priimek: String, email: String, spol: String, datumRojstva: Date[], geslo: String, opisUporabnika: String): Uporabnik[]
+  -posodobiTipUporabnika(jeInfulencer: bool, jeTrener: bool): Uporabnik[]
+}
+
+Class "Sporočila" AS SPOROCILA <<entity>> {
+  +uporabnikId: int
+  +sporociloTxt: String
+  +prijateljId: int
+  -posljiSporocilo(sporociloTxt: String, prijateljId: int): void
+  -vrniVsaSporocila(uporabnikId: int): sporociloa
+}
+
+Class "Prijave" AS PRIJAVE <<entity>> {
+  -uporabnikId: int
+  -dogodekId: int
+  +prijavaNaDogodek(dogodekId: int, uporabnikId: int):void
+}
+
+Class "Dogodki" AS DOGODKI <<entity>> {
+  -naslovDogodka: String
+  -opisDogodka: String
+  -stMest: int
+  -lokacija: String
+  -uporabnikId: int
+  -vnos: String
+  +ustvariDogodek(naslovDogodka: String, opisDogodka: String, stMest: int, lokacija: String, uporabnikId: int): void
+  +iskanjePlanaVadbe(vnos: String): Dogodek[]
+}
+
+Class "Obroki" AS OBROKI <<entity>> {
+  -obrok: String
+  -datum: date[]
+  +shraniObrok(obrok: String, datum: date[]): void
+}
+
+Class "Treningi" AS TRENINGI <<entity>> {
+  -uporabnikId: int
+  -tipTreninga: String
+  -datumTrening: date
+  -trajanje: time
+  -treningId: int
+  +dodajanjeTreninga(tipTreninga: String, opisAktivnosti: String, datum: date, uporabnik: Uporabnik, trajanje: time): void
+}
+
+Class "Meditacije" AS MEDITACIJE <<entity>> {
+  -casIzvajanja: time
+  -uporabnikId: int
+  +dodajMeditacijo(uporabnikId: int, casIzvajanja: time):void
+}
+
+Class "Koraki" AS KORAKI <<entity>> {
+  -datum: Date[]
+  -stKorakov: int
+  +vrniAnalizoDnevnihKorakov(datum: Date[]): Koraki[]
+  +dodajStKorakov(stKorakov: int): void
+}
+
+Class "Spanec" AS SPANEC <<entity>> {
+  -datum: Date[]
+  -spanjeCas: time
+  +vrniAnalizoDnevnegaSpanca(datum: Date[]): Spanec[]
+  +dodajSpanje(spanjeCas: time): void
+}
+
+Class "Hrana" AS HRANA <<entity>> {
+  -nazivZivila: String
+  -kolicina: int
+  -energVrednost: int
+  -ohVrednost: int
+  -beljVred: int
+  -mascVred: int
+  +shraniHrano(nazivZivila: String, kolicina: int, energVrednost: int, ohVrednost: int, beljVred: int, mascVred: int): void
+}
+
+Class "Vadba" AS VADBA <<entity>> {
+  -nazivVadbe: String
+  -tipVade: String
+  -misSkup: String
+  -stPonovitev: int
+  -stSetov: int
+  -tezaOrodja: int
+  +dodajanjeVadbe(trajanje: time, nazivVadbe: String, tipVade: String, misSkup: String, stPonovitev: int, stSetov: int,tezaOrodja: int): void
+}
+
+Class "JymBud API" as JAPI <<boundary>>  {
+  -uporabnikId: int
+  -tipTreninga: String
+  -datumTrening: date
+  -trajanje: time
+  -treningId: int
+  +dodajanjeTreninga(tipTreninga: String, opisAktivnosti: String, datum: date, uporabnik: Uporabnik, trajanje: time): void
+  +posodobiOsnovneNastavitve(uporabnikId: int, ime: String, priimek: String, email: String, spol: String, datumRojstva: Date[], geslo: String, opisUporabnika: String): Uporabnik[]
+  +brisanjeAktivnosti(treningId: int): void
+  +prikažiLestvicoTopUporabnikov(): Uporabnik[]
+}
+
+REGISTRACIJA_VIEW "1..1" ---> "1..1" LOGIN_CONTROL
+PRIJAVA_VIEW "1..1" ---> "1..1" LOGIN_CONTROL
+ODJAVA_VIEW "1..1" --> "1..1" LOGIN_CONTROL
+
+PRIJATELJI_VIEW "1..1" --> "1..1" PROFIL_CONTROL
+UREJANJE_PROFILA_VIEW "1..1" --> "1..1" PROFIL_CONTROL
+
+LESTVICA_VIEW "1..1" ---> "1..1" AKTIVNOSTI_CONTROL
+MEDITACIJA_VIEW "1..1" --> "1..1" AKTIVNOSTI_CONTROL
+ANALIZA_OBROKOV_VIEW "1..1" -----l-> "1..1" AKTIVNOSTI_CONTROL
+DODAJANJE_TRENINGOV_VIEW "1..1" -----> "1..1" AKTIVNOSTI_CONTROL
+ANALIZA_TRENINGOV_VIEW "1..1" ---> "1..1" AKTIVNOSTI_CONTROL
+ANALIZA_SPANCA_VIEW "1..1" --> "1..1" AKTIVNOSTI_CONTROL
+ANALIZA_KORAKOV_VIEW "1..1" ----> "1..1" AKTIVNOSTI_CONTROL
+ANALIZA_PREHRANE_VIEW "1..1" ----> "1..1" AKTIVNOSTI_CONTROL
+ANALIZA_FORME_VIEW "1..1" ---> "1..1" AKTIVNOSTI_CONTROL
+JAPI "1..1" -------> "1..1" AKTIVNOSTI_CONTROL
+
+DOGODKI_VIEW "1..1" -- "1..1" DOGODKI_CONTROL
+USTVARJANJE_DOGODKOV_VIEW "1..1" --> "1..1" DOGODKI_CONTROL
+
+PLANI_PREHRANE_IN_VADB_CONTROL "1..1" --> "1..1" PLANI_PREHRANE_VADBE
+
+ISKANJE_PLANOV_VIEW "1..1" --> "1..1" PLANI_PREHRANE_IN_VADB_CONTROL
+
+PROFIL_CONTROL "1..1" --> "1..1" UPORABNIKI
+
+DOGODKI_CONTROL "1..1" --> "1..1" DOGODKI
+
+DOGODKI "1..1" ---> "0..n" PRIJAVE
+LOGIN_CONTROL "1..1" --> "1..1" UPORABNIKI
+
+AKTIVNOSTI_CONTROL "1..1" --> "1..1" AKTIVNOSTI
+
+AKTIVNOSTI  "1..1" ---> "0..n" KORAKI
+AKTIVNOSTI  "1..1" ---> "0..n" MEDITACIJE
+AKTIVNOSTI  "1..1" --> "0..n" TRENINGI
+AKTIVNOSTI  "1..1" --> "0..n" SPANEC
+AKTIVNOSTI  "1..1" --> "0..n" OBROKI
+
+UPORABNIKI "'1..1" --> "0..n" SPOROCILA
+UPORABNIKI "1..1" --> "0..n" AKTIVNOSTI
+UPORABNIKI "0..n" -l-> "1..1" PRIJAVE
+
+UPORABNIKI "0..n" --> "1..1" PLANI_PREHRANE_VADBE
+
+
+OBROKI  "1..1" --> "0..n" HRANA
+TRENINGI  "1..1" --> "0..n" VADBA
+@enduml

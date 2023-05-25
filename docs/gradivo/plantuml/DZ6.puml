@@ -1,0 +1,46 @@
+@startuml
+hide footbox
+
+skinparam backgroundcolor transparent
+skinparam defaultTextAlignment center
+skinparam actorBorderColor black
+skinparam actorBackgroundColor white
+skinparam arrowColor black  
+skinparam sequenceLifeLineBorderColor #5FB8EC
+skinparam sequenceParticipantBorderColor #Black
+skinparam sequenceParticipantBackgroundColor white
+
+actor PrijavljeniUpor as "<<actor>>\nPrijavljeni uporabnik\nTrener\nInfluencer"
+participant AnalizaTrenignovView as "<<boundary>>\nAnalizaSpancaView" #LightGreen
+participant AktivnostiController as "<<control>>\nAktivnostiController" #FFAAAA
+participant Aktivnost as "<<entity>>\nAktivnost" #LightBlue
+
+PrijavljeniUpor --> AnalizaTrenignovView: vrniAnalizoDnevnegaSpanca()
+activate AnalizaTrenignovView
+PrijavljeniUpor --> AnalizaTrenignovView: dodajSpanje()
+AnalizaTrenignovView --> AktivnostiController: vrniAnalizoDnevnegaSpanca()
+activate AktivnostiController
+AnalizaTrenignovView --> AktivnostiController: dodajSpanje()
+AktivnostiController --> Aktivnost: vrniAnalizoDnevnegaSpanca()
+activate Aktivnost
+AktivnostiController --> Aktivnost: dodajSpanje()
+Aktivnost --> AktivnostiController: //Informacije o spancu
+AktivnostiController --> AnalizaTrenignovView: //Informacije o spancu
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži poročilo o spancu
+
+alt Analiza Spanca
+PrijavljeniUpor --> AnalizaTrenignovView: vrniAnalizoDnevnegaSpanca()
+PrijavljeniUpor --> AnalizaTrenignovView: dodajSpanje()
+AnalizaTrenignovView --> AktivnostiController: vrniAnalizoDnevnegaSpanca()
+AnalizaTrenignovView --> AktivnostiController: dodajSpanje()
+AktivnostiController --> Aktivnost: vrniAnalizoDnevnegaSpanca()
+AktivnostiController --> Aktivnost: dodajSpanje()
+Aktivnost --> AktivnostiController: //Najdenega ni še nobenega spanca
+deactivate Aktivnost
+AktivnostiController --> AnalizaTrenignovView: //Najdenega ni še nobenega spanca
+deactivate AktivnostiController
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži prazen graf analize spanca
+deactivate AnalizaTrenignovView
+
+end
+@enduml

@@ -1,0 +1,65 @@
+@startuml
+hide footbox
+
+skinparam backgroundcolor transparent
+skinparam defaultTextAlignment center
+skinparam actorBorderColor black
+skinparam actorBackgroundColor white
+skinparam arrowColor black  
+skinparam sequenceLifeLineBorderColor #5FB8EC
+skinparam sequenceParticipantBorderColor #5FB8EC
+skinparam sequenceParticipantBackgroundColor white
+
+actor PrijavljeniUpor as "<<actor>>\nPrijavljeni uporabnik\nTrener\nInfluencer"
+actor Influencer as "<<actor>>\nInfluencer"
+participant IskanjeDogodkovView as "<<boundary>>\nIskanjeDogodkovView" #LightGreen
+participant OrganiziranjeDogodkovView as "<<boundary>>\nOrganiziranjeDogodkovView" #LightGreen
+participant PrijavaNaDogodekView as "<<boundary>>\nPrijavaNaDogodekView" #LightGreen
+participant DogodkiController as "<<control>>\nDogodkiController" #FFAAAA
+participant Dogodek as "<<entity>>\nDogodek" #LightBlue
+
+PrijavljeniUpor --> IskanjeDogodkovView: vrniSeznamDogodkov()
+activate IskanjeDogodkovView
+IskanjeDogodkovView --> DogodkiController: vrniSeznamDogodkov()
+activate DogodkiController
+DogodkiController --> Dogodek: vrniSeznamDogodkov()
+activate Dogodek
+Dogodek --> DogodkiController: //Seznam vseh dogodkov Meet and Greet
+DogodkiController --> IskanjeDogodkovView: //Seznam vseh dogodkov Meet and Greet
+IskanjeDogodkovView --> PrijavljeniUpor: //Prikaži vse dogodke Meet and Greet
+deactivate IskanjeDogodkovView
+
+PrijavljeniUpor --> PrijavaNaDogodekView: prijavaNaDogodek()
+activate PrijavaNaDogodekView
+PrijavaNaDogodekView --> DogodkiController: prijavaNaDogodek()
+DogodkiController --> Dogodek: prijavaNaDogodek()
+Dogodek --> DogodkiController: //Posodobljene informacije o dogodku Meet and Greet
+DogodkiController --> PrijavaNaDogodekView: //Posodobljene informacije o dogodku Meet and Greet
+PrijavaNaDogodekView --> PrijavljeniUpor: //Prikazana posodobljena stran o dogodku Meet and Greet
+deactivate PrijavaNaDogodekView
+
+alt Organiziranje Dogodka Meet and Greet
+Influencer --> OrganiziranjeDogodkovView: novDogodekObrazec()
+activate OrganiziranjeDogodkovView
+OrganiziranjeDogodkovView --> DogodkiController: novDogodekObrazec()
+DogodkiController --> Dogodek: novDogodekObrazec()
+Dogodek --> DogodkiController: //Prikazi obrazec za nov dogodek Meet and Greet
+DogodkiController --> OrganiziranjeDogodkovView: //Prikazi obrazec za nov dogodek Meet and Greet
+OrganiziranjeDogodkovView --> Influencer: //Prikazana stran z obrazcem za nov dogodek Meet and Greet
+
+Influencer --> OrganiziranjeDogodkovView: ustvariDogodek()
+OrganiziranjeDogodkovView --> DogodkiController: ustvariDogodek()
+DogodkiController --> Dogodek: ustvariDogodek()
+Dogodek --> DogodkiController: //Informacije o novem dogodku Meet and Greet
+deactivate Dogodek
+DogodkiController --> OrganiziranjeDogodkovView: //Informacije o novem dogodku Meet and Greet
+OrganiziranjeDogodkovView --> Influencer: //Prikazana stran z novim dogodkom Meet and Greet
+
+else Neustrezen Vnos
+DogodkiController --> OrganiziranjeDogodkovView: //Zahtevaj prikaz opozorila o neustreznem vnosu
+deactivate DogodkiController
+OrganiziranjeDogodkovView --> Influencer: //Opozori prijavljenega uporabnika o neustreznem vnosu
+deactivate OrganiziranjeDogodkovView
+
+end
+@enduml

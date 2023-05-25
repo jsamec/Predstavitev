@@ -1,0 +1,49 @@
+@startuml
+hide footbox
+
+skinparam backgroundcolor transparent
+skinparam defaultTextAlignment center
+skinparam actorBorderColor black
+skinparam actorBackgroundColor white
+skinparam arrowColor black  
+skinparam sequenceLifeLineBorderColor #5FB8EC
+skinparam sequenceParticipantBorderColor #Black
+skinparam sequenceParticipantBackgroundColor white
+
+actor PrijavljeniUpor as "<<actor>>\nPrijavljeni uporabnik\nTrener\nInfluencer"
+participant AnalizaTrenignovView as "<<boundary>>\nAnalizaPrehraneView" #LightGreen
+participant AktivnostiController as "<<control>>\nAktivnostiController" #FFAAAA
+participant Aktivnost as "<<entity>>\nAktivnost" #LightBlue
+
+PrijavljeniUpor --> AnalizaTrenignovView: vrniAnalizoPrehrane()
+activate AnalizaTrenignovView
+PrijavljeniUpor --> AnalizaTrenignovView: prikažiAnalizoPrehrane()
+AnalizaTrenignovView --> AktivnostiController: vrniAnalizoPrehrane()
+activate AktivnostiController
+AnalizaTrenignovView --> AktivnostiController: prikažiAnalizoPrehrane()
+AktivnostiController --> Aktivnost: vrniAnalizoPrehrane()
+activate Aktivnost
+AktivnostiController --> Aktivnost: prikažiAnalizoPrehrane()
+Aktivnost --> AktivnostiController: //Informacije o prehrani
+AktivnostiController --> AnalizaTrenignovView: //Informacije o prehrani
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži poročilo o prehrani
+
+alt Analiza Prehrane
+PrijavljeniUpor --> AnalizaTrenignovView: vrniAnalizoPrehrane()
+PrijavljeniUpor --> AnalizaTrenignovView: prikažiAnalizoPrehrane()
+AnalizaTrenignovView --> AktivnostiController: vrniAnalizoPrehrane()
+AnalizaTrenignovView --> AktivnostiController: prikažiAnalizoPrehrane()
+AktivnostiController --> Aktivnost: vrniAnalizoPrehrane()
+AktivnostiController --> Aktivnost: prikažiAnalizoPrehrane()
+Aktivnost --> AktivnostiController: //Najdene ni nobene prehrane
+deactivate Aktivnost
+
+AktivnostiController --> AnalizaTrenignovView: //Najdenih ni nobenih obrokov
+AnalizaTrenignovView --> PrijavljeniUpor: //Sistem javi, da v izbranem obdobju ni vnešenih zaužitih makrohranil
+AktivnostiController --> AnalizaTrenignovView: //Najdenih ni nobenih obrokov
+deactivate AktivnostiController
+AnalizaTrenignovView --> PrijavljeniUpor: //Sistem javi, da ni možno prikazati dnevnega vnosa kalorij
+deactivate AnalizaTrenignovView
+
+end
+@enduml

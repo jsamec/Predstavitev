@@ -1,0 +1,40 @@
+@startuml
+hide footbox
+
+skinparam backgroundcolor transparent
+skinparam defaultTextAlignment center
+skinparam actorBorderColor black
+skinparam actorBackgroundColor white
+skinparam arrowColor black  
+skinparam sequenceLifeLineBorderColor #5FB8EC
+skinparam sequenceParticipantBorderColor #Black
+skinparam sequenceParticipantBackgroundColor white
+
+actor PrijavljeniUpor as "<<actor>>\nPrijavljeni uporabnik\nTrener\nInfluencer"
+participant AnalizaTrenignovView as "<<boundary>>\nAnalizaTrenignovView" #LightGreen
+participant AktivnostiController as "<<control>>\nAktivnostiController" #FFAAAA
+participant Aktivnost as "<<entity>>\nAktivnost" #LightBlue
+
+PrijavljeniUpor --> AnalizaTrenignovView: vrniSeznamDnevnihTreningov()
+activate AnalizaTrenignovView
+AnalizaTrenignovView --> AktivnostiController: vrniSeznamDnevnihTreningov()
+activate AktivnostiController
+AktivnostiController --> Aktivnost: vrniSeznamDnevnihTreningov()
+activate Aktivnost
+Aktivnost --> AktivnostiController: //Informacije o aktivnosti
+AktivnostiController --> AnalizaTrenignovView: //Informacije o treningih
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži poročilo o treningih
+
+alt Analiza Obrokov
+PrijavljeniUpor --> AnalizaTrenignovView: vrniSeznamDnevnihTreningov()
+AnalizaTrenignovView --> AktivnostiController: vrniSeznamDnevnihTreningov()
+AktivnostiController --> Aktivnost: vrniSeznamDnevnihTreningov()
+Aktivnost --> AktivnostiController: //Najdene ni še nobene aktivnosti
+deactivate Aktivnost
+AktivnostiController --> AnalizaTrenignovView: //Najdene ni še nobene aktivnosti
+deactivate AktivnostiController
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži sporočilo z napako o še nobeni objavljeni aktivnosti
+deactivate AnalizaTrenignovView
+
+end
+@enduml

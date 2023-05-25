@@ -1,0 +1,40 @@
+@startuml
+hide footbox
+
+skinparam backgroundcolor transparent
+skinparam defaultTextAlignment center
+skinparam actorBorderColor black
+skinparam actorBackgroundColor white
+skinparam arrowColor black  
+skinparam sequenceLifeLineBorderColor #5FB8EC
+skinparam sequenceParticipantBorderColor #Black
+skinparam sequenceParticipantBackgroundColor white
+
+actor PrijavljeniUpor as "<<actor>>\nTrener"
+participant AnalizaTrenignovView as "<<boundary>>\nPlaniPrehraneInVadbView" #LightGreen
+participant AktivnostiController as "<<control>>\nAPlaniPrehraneInVadbController" #FFAAAA
+participant Aktivnost as "<<entity>>\nPlaniPrehraneInVadb" #LightBlue
+
+PrijavljeniUpor --> AnalizaTrenignovView: ustvariPlan()
+activate AnalizaTrenignovView
+AnalizaTrenignovView --> AktivnostiController: ustvariPlan()
+activate AktivnostiController
+AktivnostiController --> Aktivnost: ustvariPlan()
+activate Aktivnost
+Aktivnost --> AktivnostiController: //Informacije o planu
+deactivate Aktivnost
+AktivnostiController --> AnalizaTrenignovView: //Informacije o planu 
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži informacije o planu 
+
+alt Napačen vnos
+
+AktivnostiController --> AnalizaTrenignovView: //Polja za tip plana ni označeno
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži sporočilo, da morajo biti tip plana označen
+
+AktivnostiController --> AnalizaTrenignovView: //Vsa polja niso izpolnjena
+deactivate AktivnostiController
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži sporočilo, da morajo biti vsa polja izpolnjena
+deactivate AnalizaTrenignovView
+
+end
+@enduml

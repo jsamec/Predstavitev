@@ -1,0 +1,37 @@
+@startuml
+hide footbox
+
+skinparam backgroundcolor transparent
+skinparam defaultTextAlignment center
+skinparam actorBorderColor black
+skinparam actorBackgroundColor white
+skinparam arrowColor black  
+skinparam sequenceLifeLineBorderColor #5FB8EC
+skinparam sequenceParticipantBorderColor #Black
+skinparam sequenceParticipantBackgroundColor white
+
+actor PrijavljeniUpor as "<<actor>>\nPrijavljeni uporabnik\nTrener\nInfluencer"
+participant AnalizaTrenignovView as "<<boundary>>\nDodajanjeTreningovView" #LightGreen
+participant AktivnostiController as "<<control>>\nAktivnostiController" #FFAAAA
+participant Aktivnost as "<<entity>>\nAktivnosti" #LightBlue
+
+PrijavljeniUpor --> AnalizaTrenignovView: dodajanjeTreninga()
+activate AnalizaTrenignovView
+AnalizaTrenignovView --> AktivnostiController: dodajanjeTreninga()
+activate AktivnostiController
+AktivnostiController --> Aktivnost: dodajanjeTreninga()
+activate Aktivnost
+Aktivnost --> AktivnostiController: //Informacije o treningu
+deactivate Aktivnost
+AktivnostiController --> AnalizaTrenignovView: //Informacije o treningu
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži informacije o treningu
+
+alt Napačen vnos
+
+AktivnostiController --> AnalizaTrenignovView: //Podatki o treningu niso vpisani
+deactivate AktivnostiController
+AnalizaTrenignovView --> PrijavljeniUpor: //Prikaži opozorilo, da podatki o treningu niso vpisani
+deactivate AnalizaTrenignovView
+
+end
+@enduml
