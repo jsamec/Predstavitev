@@ -1,6 +1,6 @@
 const authToken = require('../middleware/session')
 const checkSession = require('../middleware/session')
-const Uporabnik = require('../models/Uporabnik')
+const Uporabnik = require('../models/uporabnik')
 const Aktivnost = require('../models/aktivnost')
 const Hrana = require('../models/hrana')
 const Obrok = require('../models/obroki')

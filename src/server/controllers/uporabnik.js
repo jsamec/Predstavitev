@@ -1,4 +1,4 @@
-const Uporabnik = require('../models/Uporabnik')
+const Uporabnik = require('../models/uporabnik')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 JWT_SECRET = 'mysecretkey123'
