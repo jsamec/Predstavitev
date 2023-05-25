@@ -21,7 +21,9 @@ const dogodki = require('./routes/Dogodki')
 const uporabniki = require('./routes/uporabnik')
 
 app.get('/', (req, res) => {
-  res.send('Ta spletna stran je še v izdelavi ...')
+  //res.send('Ta spletna stran je še v izdelavi ...')
+  //redirect to port 3000
+  res.redirect('http://localhost:3000')
 })
 
 app.use('/aktivnosti/api', aktivnosti)
