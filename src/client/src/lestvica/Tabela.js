@@ -5,7 +5,7 @@ const columns = [
   { field: 'mesto', headerName: 'Mesto', flex: 1},
   { field: 'ime', headerName: 'Ime', flex: 1.5},
   { field: 'tocke', headerName: 'Točke', flex: 1},
-  { field: 'napredek', headerName: 'Napredek', flex: 1},
+  { field: 'napredek', headerName: 'Prijatelj', flex: 1},
 ];
 
 const rows = [
@@ -20,15 +20,13 @@ const rows = [
 
 export default function Tabela( {uporabnikiInTocke} ) {
 
-  console.log(uporabnikiInTocke);
-
   const rows = uporabnikiInTocke.map((uporabnik, index) => {
     return {
       id: index,
       mesto: uporabnik.mesto,
       ime: uporabnik.ime,
       tocke: uporabnik.tocke,
-      napredek: uporabnik.napredek
+      napredek: 'Ne' //TODO, check if friend ko bo prijateljstvo implementirano
     }
   });
 

@@ -4,6 +4,7 @@ const Uporabnik = require('../models/Uporabnik')
 const Aktivnost = require('../models/aktivnost')
 const Hrana = require('../models/hrana')
 const Obrok = require('../models/obroki')
+const Spanec = require('../models/spanec')
 JWT_SECRET = 'mysecretkey123'
 
 const aktivnosti = {}
@@ -50,18 +51,32 @@ aktivnosti.ustvari_hrana = async (req, res) => {
   }
 
   //create obrok
-  const obrok = await Obrok.ustvari_obrok(userId, obrok_ime, datum);
+  const obrok = await Obrok.ustvari_obrok(userId, obrok_ime, datum)
 
   //create hrana
   for (let i = 0; i < payload.hranaArray.length; i++) {
-    const hrana = payload.hranaArray[i];
-    const hrana_id = await Hrana.ustvari_hrana(userId, hrana.imeHrane, datum, obrok_ime, hrana.kolicina, hrana.energija, hrana.ogljikoviHidrati, hrana.mascobe, hrana.beljakovine) 
+    const hrana = payload.hranaArray[i]
+    const hrana_id = await Hrana.ustvari_hrana(
+      userId,
+      hrana.imeHrane,
+      datum,
+      obrok_ime,
+      hrana.kolicina,
+      hrana.energija,
+      hrana.ogljikoviHidrati,
+      hrana.mascobe,
+      hrana.beljakovine
+    )
   }
 
   //convert string to number
   const prev_tocke = Number(aktivni_dan[0].tocke)
   console.log(prev_tocke + payload.hranaArray.length)
-  const tocke = await Aktivnost.posodobi_aktivni_dan(userId, prev_tocke + payload.hranaArray.length, datum)
+  const tocke = await Aktivnost.posodobi_aktivni_dan(
+    userId,
+    prev_tocke + payload.hranaArray.length,
+    datum
+  )
 
   res.status(201).json(obrok)
 }
@@ -69,34 +84,70 @@ aktivnosti.ustvari_hrana = async (req, res) => {
 aktivnosti.vrniLeaderboard = async (req, res) => {
   const { id: userId } = await checkSession(req, res)
   if (userId) {
-    const uporabniki = await Uporabnik.vrniVse();
-    let leaderboard = [];
+    const uporabniki = await Uporabnik.vrniVse()
+    let leaderboard = []
     for (let i = 0; i < uporabniki.length; i++) {
-      const uporabnik = uporabniki[i];
-      let tocke = await Aktivnost.vrniTocke(uporabnik.id);
+      const uporabnik = uporabniki[i]
+      let tocke = await Aktivnost.vrniTocke(uporabnik.id)
       tocke = tocke.rows[0].tocke
-      if (tocke === null){
-        tocke = 0;
-      }else{
-        tocke = Number(tocke);
+      if (tocke === null) {
+        tocke = 0
+      } else {
+        tocke = Number(tocke)
       }
-      leaderboard.push({uporabnik, tocke})
+      leaderboard.push({ uporabnik, tocke })
     }
 
     //determine rank
     leaderboard.sort((a, b) => {
-      return b.tocke - a.tocke;
-    }
-    )
+      return b.tocke - a.tocke
+    })
 
     for (let i = 0; i < leaderboard.length; i++) {
-      const uporabnik = leaderboard[i];
-      uporabnik.mesto = i + 1;
-      uporabnik.napredek = 0;
-      uporabnik.ime = uporabnik.uporabnik.ime;
+      const uporabnik = leaderboard[i]
+      uporabnik.mesto = i + 1
+      uporabnik.napredek = 0
+      uporabnik.ime = uporabnik.uporabnik.ime
     }
-    res.status(200).json(leaderboard) 
+    res.status(200).json(leaderboard)
   }
+}
+
+aktivnosti.vrniUporabnikoveAktivnosti = async (req, res) => {
+  const { id: userId } = await checkSession(req, res)
+  if (userId) {
+    const aktivnosti = await Aktivnost.vrniUporabnikoveAktivnosti(userId)
+    if (aktivnosti) return res.status(200).json(aktivnosti)
+  }
+}
+
+aktivnosti.ustvariSpanec = async (req, res) => {
+  const { payload } = req.body
+
+  const { id: userId } = await checkSession(req, res)
+
+  const datum = payload.datum
+  const cas = payload.cas
+
+  const obstaja = await Spanec.obstaja(userId, datum)
+  console.log(obstaja)
+  if (obstaja) {
+    console.log('obstaja')
+    const rez = await Spanec.posodobi(userId, datum, cas)
+    return res.status(201).json(rez)
+  }
+
+  console.log('ne obstaja')
+  const rez = await Spanec.ustvari(userId, datum, cas)
+  return res.status(201).json(rez)
+}
+
+aktivnosti.vrniSpanec = async (req, res) => {
+  const { id: userId } = await checkSession(req, res)
+
+  const result = await Spanec.vrniVse(userId)
+
+  return res.status(200).json(result)
 }
 
 module.exports = aktivnosti

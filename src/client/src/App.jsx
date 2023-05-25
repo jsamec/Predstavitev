@@ -10,15 +10,26 @@ import DogodkiR from './vsi_dogodki/DogodkiR'
 import LestvicaR from './lestvica/LestvicaR'
 import SpanecR from './spanec/SpanecR'
 import AktivnostiR from './aktivnosti/AktivnostiR'
+import LestvicaAPI from './jymbud_api/Lestvica'
+import UporabnikAPI from './jymbud_api/Uporabnik'
 
 function App() {
   const [currentUser, setCurrentUser] = useState(undefined)
 
   useEffect(() => {
-    const user = AuthService.getCurrentUser()
-    if (user) {
-      setCurrentUser(user)
+    const fetchData = async () => {
+      const user = AuthService.getCurrentUser()
+      if (user) {
+        try {
+          const userData = await AuthService.getUserData()
+          setCurrentUser(userData)
+        } catch (error) {
+          console.error(error)
+        }
+      }
     }
+
+    fetchData()
   }, [])
 
   const logOut = () => {
@@ -59,13 +70,13 @@ function App() {
       </nav>
 
       <div className="d-flex">
-        <nav
-          id="side-nav"
-          className="navbar navbar-dark bg-dark flex-column p-4"
-        >
-          <div className="navbar-nav">
-            {currentUser && (
-              <>
+        {currentUser && (
+          <>
+            <nav
+              id="side-nav"
+              className="navbar navbar-dark bg-dark flex-column p-5 pt-3  min-vh-100 col-1.8 "
+            >
+              <div className="navbar-nav">
                 <Link to={'/sledilnik_prehrane'} className="nav-link">
                   Sledilnik prehrane
                 </Link>
@@ -82,17 +93,19 @@ function App() {
                   Moje aktivnosti
                 </Link>
 
-                <Link to={'/dodaj-dogodek'} className="nav-link">
-                  Dodaj dogodek
-                </Link>
+                {currentUser.status === 'influencer' && (
+                  <Link to={'/dodaj-dogodek'} className="nav-link">
+                    Dodaj dogodek
+                  </Link>
+                )}
 
                 <Link to={'/vsi-dogodki'} className="nav-link">
                   Vsi dogodki
                 </Link>
-              </>
-            )}
-          </div>
-        </nav>
+              </div>
+            </nav>
+          </>
+        )}
 
         <div className="container mt-3">
           <Routes>
@@ -103,11 +116,18 @@ function App() {
               path="/sledilnik_prehrane"
               element={<SledilnikPrehraneR />}
             />
-            <Route path="/dodaj-dogodek" element={<OrganizacijaR />} />
+            {currentUser && currentUser.status === 'influencer' && (
+              <Route path="/dodaj-dogodek" element={<OrganizacijaR />} />
+            )}
             <Route path="/vsi-dogodki" element={<DogodkiR />} />
             <Route path="/lestvica" element={<LestvicaR />} />
             <Route path="/spanec" element={<SpanecR />} />
             <Route path="/aktivnosti" element={<AktivnostiR />} />
+            <Route
+              path="/aktivnosti/top-uporabniki"
+              element={<LestvicaAPI />}
+            />
+            <Route path="/uporabnik/:id" element={<UporabnikAPI />} />
           </Routes>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { SERVER_URL } from '../config'
+import authHeader from './auth-header'
 
 const signup = data => {
   return axios
@@ -33,11 +34,25 @@ const getCurrentUser = () => {
   return JSON.parse(localStorage.getItem('user'))
 }
 
+const getUserData = () => {
+  const token = localStorage.getItem('user')
+  if (token) {
+    return axios
+      .get(`${SERVER_URL}/uporabniki/api/userCheck`, {
+        headers: authHeader()
+      })
+      .then(response => {
+        return response.data
+      })
+  }
+}
+
 const authService = {
   signup,
   login,
   logout,
-  getCurrentUser
+  getCurrentUser,
+  getUserData
 }
 
 export default authService

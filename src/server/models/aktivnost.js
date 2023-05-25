@@ -28,7 +28,7 @@ Aktivnost.vrniVse = async () => {
   const query = `  
   SELECT a.id, a.ime, a.energija, a.datum, a.id_uporabnik, u.ime AS uporabnik_ime
   FROM aktivnosti AS a
-  JOIN uporabniki AS u ON a.id_uporabnik = u.id;
+  JOIN uporabniki AS u ON a.id_uporabnik = u.id
   `
 
   const { rows: aktivnosti } = await pool.query(query)
@@ -60,12 +60,12 @@ Aktivnost.posodobi_aktivni_dan = async (userId, tocke, datum) => {
   const query =
     'UPDATE aktivni_dnevi SET tocke = $1 WHERE id_uporabnika = $2 AND datum = $3 RETURNING id_uporabnika'
   const arr = [tocke, userId, datum]
-  
+
   const result = await pool.query(query, arr)
   return result
 }
 
-Aktivnost.vrniTocke = async (uporabnikId) => {
+Aktivnost.vrniTocke = async uporabnikId => {
   const query = `
   SELECT SUM(tocke) AS tocke
   FROM aktivni_dnevi
@@ -75,6 +75,20 @@ Aktivnost.vrniTocke = async (uporabnikId) => {
 
   const result = await pool.query(query, arr)
   return result
+}
+
+Aktivnost.vrniUporabnikoveAktivnosti = async userId => {
+  const query = `  
+  SELECT a.id, a.ime, a.energija, a.datum, a.id_uporabnik, u.ime AS uporabnik_ime
+  FROM aktivnosti AS a
+  JOIN uporabniki AS u ON a.id_uporabnik = u.id
+  WHERE u.id = $1
+  `
+
+  const arr = [userId]
+  const { rows: aktivnosti } = await pool.query(query, arr)
+  console.log(aktivnosti)
+  return aktivnosti
 }
 
 module.exports = Aktivnost

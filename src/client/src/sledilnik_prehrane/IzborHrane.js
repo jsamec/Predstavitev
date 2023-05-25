@@ -36,7 +36,7 @@ export default function IzborHrane({dodajHrano}) {
       <Box
         component="form"
         sx={{
-          '& > :not(style)': { m: 1, width: '30ch' },
+          '& > :not(style)': { m: 1, width: '20ch', marginTop: '15px', marginBottom: '5px' },
         }}
         noValidate
         autoComplete="off"
@@ -47,7 +47,8 @@ export default function IzborHrane({dodajHrano}) {
         <TextField id="ogHidrati" label="Ogljikovi hidrati[g]" variant="outlined" type="number" value={ogHidrati} onChange={(e) =>  nastaviStevilo(e, setOgHidrati)} />
         <TextField id="beljakovine" label="Beljakovine[g]" variant="outlined" type="number" value={beljakovine} onChange={(e) =>  nastaviStevilo(e, setBeljakovine)} />
         <TextField id="mascobe" label="Maščobe[g]" variant="outlined" type="number" value={mascobe} onChange={(e) => nastaviStevilo(e, setMascobe)} />
-        <Button variant="contained" onClick={submit} >Dodaj</Button>
+        <br />
+        <Button variant="contained" onClick={submit} style={{marginTop: '3px', marginBottom: '40px'}} >Dodaj</Button>
   
       </Box>
     );

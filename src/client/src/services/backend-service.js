@@ -77,6 +77,31 @@ const fetchLeaderboard = () => {
   })
 }
 
+const fetchUserActivities = userId => {
+  console.log('userId')
+  return axios.get(`${SERVER_URL}/aktivnosti/api/getUserAct/${userId}`, {
+    headers: authHeader()
+  })
+}
+
+const createSpanec = spanecData => {
+  return axios
+    .post(
+      `${SERVER_URL}/aktivnosti/api/ustvariSpanec`,
+      { payload: spanecData },
+      {
+        headers: authHeader()
+      }
+    )
+    .then(alert('Uspešno ustvarjen spanec'))
+}
+
+const vrniSpanec = () => {
+  return axios.get(`${SERVER_URL}/aktivnosti/api/vrniSpanec`, {
+    headers: authHeader()
+  })
+}
+
 const backendService = {
   createEvent,
   fetchEvents,
@@ -85,7 +110,10 @@ const backendService = {
   createActivity,
   fetchAllActivities,
   createFood,
-  fetchLeaderboard
+  fetchLeaderboard,
+  fetchUserActivities,
+  createSpanec,
+  vrniSpanec
 }
 
 export default backendService

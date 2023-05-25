@@ -14,7 +14,8 @@ Uporabnik.register = async (firstName, lastName, email, password) => {
 }
 
 Uporabnik.najdiEmail = async mail => {
-  const query = 'SELECT id, ime, email, geslo FROM uporabniki WHERE email = $1'
+  const query =
+    'SELECT id, ime, email, geslo, status FROM uporabniki WHERE email = $1'
   const arr = [mail]
   const { rows } = await pool.query(query, arr)
   return rows[0]

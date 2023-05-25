@@ -28,7 +28,12 @@ uporabnik.login = async (req, res) => {
     }
     console.log(userDb)
     const token = jwt.sign(
-      { id: userDb.id, ime: userDb.ime, email: userDb.email },
+      {
+        id: userDb.id,
+        ime: userDb.ime,
+        email: userDb.email,
+        status: userDb.status
+      },
       JWT_SECRET,
       { expiresIn: '24h' }
     )
@@ -54,6 +59,17 @@ uporabnik.imaSejo = async (req, res) => {
     return res.json({ success: true })
   } catch (err) {
     return res.status(401).json({ error: 'Invalid token' })
+  }
+}
+
+uporabnik.vrniPodatke = async (req, res) => {
+  const authHeader = req.headers.authorization
+  const token = authHeader.split(' ')[1]
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET)
+    return res.json(decoded)
+  } catch (err) {
+    console.log(err)
   }
 }
 
