@@ -21,6 +21,7 @@ Uporabnik.najdiEmail = async mail => {
   return rows[0]
 }
 
+
 Uporabnik.vrniVse = async () => {
   const query = `
   SELECT id, ime, priimek
