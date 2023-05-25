@@ -14,6 +14,7 @@ import LestvicaAPI from './jymbud_api/Lestvica'
 import UporabnikAPI from './jymbud_api/Uporabnik'
 
 function App() {
+  
   const [currentUser, setCurrentUser] = useState(undefined)
 
   useEffect(() => {
@@ -109,6 +110,7 @@ function App() {
 
         <div className="container mt-3">
           <Routes>
+            
             <Route path="/" element={<VseAktivnosti />} />
             <Route path="/registracija" element={<RegisterR />} />
             <Route path="/prijava" element={<LoginR />} />
@@ -128,6 +130,7 @@ function App() {
               element={<LestvicaAPI />}
             />
             <Route path="/uporabnik/:id" element={<UporabnikAPI />} />
+            <Route path='/health' element={<h1>Hello</h1>} />
           </Routes>
         </div>
       </div>
