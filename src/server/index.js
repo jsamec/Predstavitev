@@ -20,10 +20,23 @@ const aktivnosti = require('./routes/Aktivnost')
 const dogodki = require('./routes/Dogodki')
 const uporabniki = require('./routes/uporabnik')
 
+app.get('/random', (req, res) => {
+  res.send('Random string: ' + Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15))
+})
+
 app.get('/', (req, res) => {
   //res.send('Ta spletna stran je še v izdelavi ...')
-  //redirect to port 3000
-  res.redirect('http://localhost:3000')
+
+  let host = String(req.headers.host)
+  //change last char to 0
+  host = host.slice(0, -1) + "0"
+  
+  let destination = "http://" + host + "/"
+
+  console.log(destination)
+  
+  res.redirect(destination)
+  //res.send('Ta spletna stran je še v izdelavi ...')
 })
 
 app.use('/aktivnosti/api', aktivnosti)
